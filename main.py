@@ -1,11 +1,44 @@
+from DiceRollerV2.dice_roller_functions import DiceRoller as drf
+
 import tkinter as tk
 from tkinter.constants import LEFT
 import PIL.ImageTk as itk
 import PIL.Image as img
+from tkinter import messagebox
 
 # Setting window dimension variables
 window_height = 500
 window_width = 600
+
+# Empty die type string
+die_type = ''
+# Dice Total 
+dice_total = 0
+
+# Die setting functions
+def set_d4():
+    global die_type
+    die_type = 'd4'
+
+def set_d6():
+    global die_type
+    die_type = 'd6'
+
+def set_d8():
+    global die_type
+    die_type = 'd8'
+
+def set_d10():
+    global die_type
+    die_type = 'd10'
+
+def set_d12():
+    global die_type
+    die_type = 'd12'
+
+def set_d20():
+   global die_type
+   die_type = 'd20'
 
 window = tk.Tk()
 # Set default size of the window displayed.
@@ -39,32 +72,32 @@ dice_icon_frame.pack()
 # D4
 d4_photo = img.open('DiceRollerV2/dice/d4-image.png').resize((70, 70), img.ANTIALIAS)
 d4_photo_edited = itk.PhotoImage(d4_photo)
-d4_photo_label = tk.Button(dice_icon_frame, image=d4_photo_edited, bg='dim gray')
+d4_photo_label = tk.Button(dice_icon_frame, image=d4_photo_edited, bg='dim gray', command=set_d4)
 d4_photo_label.pack(side=LEFT)
 #D6
 d6_photo = img.open('DiceRollerV2/dice/d6-image.png').resize((70, 70), img.ANTIALIAS)
 d6_photo_edited = itk.PhotoImage(d6_photo)
-d6_photo_label = tk.Button(dice_icon_frame, image=d6_photo_edited, bg='dim gray')
+d6_photo_label = tk.Button(dice_icon_frame, image=d6_photo_edited, bg='dim gray', command=set_d6)
 d6_photo_label.pack(side=LEFT)
 #D8 
 d8_photo = img.open('DiceRollerV2/dice/d8-image.png').resize((70, 70), img.ANTIALIAS)
 d8_photo_edited = itk.PhotoImage(d8_photo)
-d8_photo_label = tk.Button(dice_icon_frame, image=d8_photo_edited, bg='dim gray')
+d8_photo_label = tk.Button(dice_icon_frame, image=d8_photo_edited, bg='dim gray', command=set_d8)
 d8_photo_label.pack(side=LEFT)
 #D10
 d10_photo = img.open('DiceRollerV2/dice/d10-image.png').resize((70, 70), img.ANTIALIAS)
 d10_photo_edited = itk.PhotoImage(d10_photo)
-d10_photo_label = tk.Button(dice_icon_frame, image=d10_photo_edited, bg='dim gray')
+d10_photo_label = tk.Button(dice_icon_frame, image=d10_photo_edited, bg='dim gray', command=set_d10)
 d10_photo_label.pack(side=LEFT)
 #D12
 d12_photo = img.open('DiceRollerV2/dice/d12-image.png').resize((70, 70), img.ANTIALIAS)
 d12_photo_edited = itk.PhotoImage(d12_photo)
-d12_photo_label = tk.Button(dice_icon_frame, image=d12_photo_edited, bg='dim gray')
+d12_photo_label = tk.Button(dice_icon_frame, image=d12_photo_edited, bg='dim gray', command=set_d12)
 d12_photo_label.pack(side=LEFT)
 #D20
 d20_photo = img.open('DiceRollerV2/dice/d20-image.png').resize((70, 70), img.ANTIALIAS)
 d20_photo_edited = itk.PhotoImage(d20_photo)
-d20_photo_label = tk.Button(dice_icon_frame, image=d20_photo_edited, bg='dim gray')
+d20_photo_label = tk.Button(dice_icon_frame, image=d20_photo_edited, bg='dim gray',  command=set_d20)
 d20_photo_label.pack(side=LEFT)
 #Dice End here
 
@@ -81,9 +114,38 @@ user_input_text.pack(pady=5)
 user_input = tk.Entry(dice_input_frame, bg='snow', width=int(window_width/16))
 user_input.pack(padx=10)
 
+def calc_roll():
+    global dice_total
+    amt_of_dice = int(user_input.get())
+    while(amt_of_dice != 0):
+        if (die_type == 'd4'):
+            dice_total += drf.four_sided_roll()
+            amt_of_dice -= 1
+        elif(die_type == 'd6'):
+            dice_total += drf.six_sided_roll()
+            amt_of_dice -= 1
+        elif(die_type == 'd8'):
+            dice_total += drf.eight_sided_roll()
+            amt_of_dice -= 1
+        elif(die_type == 'd10'):
+            dice_total += drf.ten_sided_roll()
+            amt_of_dice -= 1
+        elif(die_type == 'd12'):
+            dice_total += drf.twelve_sided_roll()
+            amt_of_dice -= 1
+        elif(die_type == 'd20'):
+            dice_total += drf.twenty_sided_roll()
+            amt_of_dice -= 1
+        else:
+            messagebox.showinfo("Error", "Invalid die chosen please start again")
+            amt_of_dice = 0
+    messagebox.showinfo("Total Roll", f'Your total roll is: {str(dice_total)}')
+    dice_total = 0
+
 # User Input btn to submit entry
 # TODO Button will capture the input that is entered and use it in the programs logic.
-user_input_btn = tk.Button(dice_input_frame, text="          Roll!          ", bg='snow')
+user_input_btn = tk.Button(dice_input_frame, text="          Roll!          ", bg='snow', command=calc_roll)
 user_input_btn.pack(pady=5)
 
+# Close out the loop
 window.mainloop()
